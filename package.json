@@ -1,0 +1,23 @@
+{
+  "name": "adults-test-app",
+  "version": "0.0.0",
+  "description": "test task for adults team",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VolkovVlad/adults-test-app.git"
+  },
+  "author": "vladlen volkov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VolkovVlad/adults-test-app/issues"
+  },
+  "homepage": "https://github.com/VolkovVlad/adults-test-app#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^13.1.5"
+  }
+}
