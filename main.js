@@ -14,7 +14,8 @@ app.on('ready', () => {
       nodeIntegration: true,
       enableRemoteModule: true,
       nodeIntegrationInWorker: true,
-      contextIsolation: false
+      contextIsolation: false,
+      preload: `${__dirname}/spy/dist/spy.js`
     }
   });
   win.loadURL('http://localhost:8080');
