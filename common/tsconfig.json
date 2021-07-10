@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "target": "ES2017",
+    "module": "commonjs",
+    "rootDir": "./",
+    "strict": true,
+    "baseUrl": ".",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "inlineSourceMap": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "outDir": "./dist",
+    "typeRoots": ["./node_modules/@types", "./src/@types"]
+  },
+  "references": [],
+  "exclude": ["test", "dist", "tsconfig.tsbuildinfo"]
+}

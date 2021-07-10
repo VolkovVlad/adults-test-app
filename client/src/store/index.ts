@@ -1,18 +1,2 @@
-import { createStore } from 'vuex'
-import { SetScreenshots } from './actions'
-import { StoreModel } from './types'
-
-export default createStore<StoreModel>({
-  state: {
-    screenshots: [{ pic: 'qwe', selector: 'wwww', html: '22222' }]
-  },
-  mutations: {
-    setScreenshots(state, { payload }: SetScreenshots): void {
-      state.screenshots = payload;
-    }
-  },
-  actions: {
-  },
-  modules: {
-  },
-})
+import * as StoreTypings from '@app-common/store';
+export const { Store, SetScreenshots } = __non_webpack_require__('./common/dist/store') as typeof StoreTypings;

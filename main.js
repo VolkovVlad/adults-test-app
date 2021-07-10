@@ -8,13 +8,15 @@ app.on('ready', () => {
     width: 800,
     height: 600,
     webPreferences: {
-      webSecurity: false,
+      webSecurity: true,
       devTools: true,
       allowRunningInsecureContent: true,
       nodeIntegration: true,
-      preload: `${__dirname}/test.js`
+      enableRemoteModule: true,
+      nodeIntegrationInWorker: true,
+      contextIsolation: false
     }
   });
-  win.loadURL('https://www.ozon.ru//');
+  win.loadURL('http://localhost:8080');
   win.openDevTools();
 });

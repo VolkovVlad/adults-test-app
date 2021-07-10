@@ -14,7 +14,7 @@
 
 <script>
   import { mapState } from 'vuex';
-  import Store from '@/store';
+  import { Store } from '@/store';
   import { SetScreenshots } from '@/store/actions';
   import ScreenItem from './screen-item';
 

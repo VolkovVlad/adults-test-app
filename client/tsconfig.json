@@ -18,6 +18,9 @@
     "paths": {
       "@/*": [
         "src/*"
+      ],
+      "@app-common/*": [
+        "../common/dist/*"
       ]
     },
     "lib": [
