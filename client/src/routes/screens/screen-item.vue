@@ -1,5 +1,5 @@
 <template>
-  <article class="screen-card">
+  <article class="screen-card" :title="html">
     <div class="screen-layer">
       <img class="screenshot" :src="screenshot">
     </div>
@@ -58,8 +58,8 @@ export default {
     left: 10px;
     height: calc(100% - 20px);
     width: calc(100% - 20px);
+    border: 1px dashed red;
 
-    object-position: center;
     object-fit: contain;
   }
 </style>

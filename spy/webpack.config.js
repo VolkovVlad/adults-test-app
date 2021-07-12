@@ -10,9 +10,9 @@ module.exports = {
     app: './index.ts'
   },
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "spy.js",
-    publicPath: process.env.BASE_URL,
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'spy.js',
+    publicPath: process.env.BASE_URL
   },
   module: {
     rules: [
@@ -23,29 +23,47 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "babel-loader"
+        loader: 'babel-loader'
       },
       {
         test: /\.ts$/,
         exclude: /node_modules/,
         use: [
           {
-            loader: "babel-loader",
+            loader: 'babel-loader',
             options: { babelrc: true }
           },
           {
-            loader: "ts-loader",
+            loader: 'ts-loader',
             options: { appendTsSuffixTo: [/\.vue$/] }
           }
         ]
       },
       {
-        test: /\.css$/,
+        test: /\.css$/i,
         use: [
+          {
+            loader: 'style-loader',
+            options: {
+              insert: (element) => {
+                const append = () => document.head.append(element);
+                if (document.readyState === 'loading') {
+                  document.addEventListener('DOMContentLoaded', append);
+                } else {
+                  append();
+                }
+              }
+            }
+          },
           'css-loader'
         ]
-      },
-    ],
+      }
+    ]
+  },
+  node: {
+    global: true,
+    __filename: true,
+    __dirname: true,
   },
   resolve: {
     extensions: ['.ts', '.js', '.vue', '.json'],
@@ -55,7 +73,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new VueLoaderPlugin(),
+    new VueLoaderPlugin()
   ],
-  devtool: 'inline-source-map',
-}
+  devtool: 'inline-source-map'
+};

@@ -1,7 +1,7 @@
 <template>
   <div class="screens">
     <div class="screens-grid">
-      <screen-item v-for="(screenshot, index) in screenshots"
+      <screen-item v-for="(screenshot, index) in log(screenshots)"
         :key="index"
         :screenshot="screenshot.pic"
         :html="screenshot.html"
@@ -14,8 +14,6 @@
 
 <script>
   import { mapState } from 'vuex';
-  import { Store } from '@/store';
-  import { SetScreenshots } from '@/store/actions';
   import ScreenItem from './screen-item';
 
   export default {
@@ -24,12 +22,11 @@
     computed: {
       ...mapState(['screenshots'])
     },
-    beforeCreate() {
-      Store.commit('setScreenshots', new SetScreenshots([{
-        html: 'qwe',
-        pic: 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png',
-        selector: ''
-      }]))
+    methods: {
+      log(any) {
+        console.log(any);
+        return any
+      }
     }
   };
 </script>

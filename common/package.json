@@ -7,7 +7,8 @@
   },
   "dependencies": {
     "vue": "^3.1.4",
-    "vuex": "^4.0.0-0"
+    "vuex": "^4.0.0-0",
+    "vuex-electron": "^1.0.3"
   },
   "devDependencies": {
     "@types/node": "^16.3.1",

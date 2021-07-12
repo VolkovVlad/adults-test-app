@@ -26,6 +26,8 @@
     grid-template-rows: 1fr;
     height: 100vh;
     overflow: hidden;
+
+    background: #fff;
   }
 
   main {
