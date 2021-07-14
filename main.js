@@ -1,19 +1,24 @@
-const { app, BrowserWindow, } = require ('electron');
+const electron = require ('electron');
 const path = require('path');
 const StaticServer = require('static-server');
-require('./common/dist/store');
+const { registerState, select, patch } = require('./common/dist/state');
+const { registerNavigationJson, read, write } = require('./common/dist/db');
+const { app, BrowserWindow } = electron;
+
 
 const server = new StaticServer({
-  rootPath: path.resolve(`${__dirname}/client/dist`),            // required, the root of the server file tree
+  rootPath: path.resolve(`${__dirname}/client/dist`),
   port: 3000,
 });
 
 const serverStarted = new Promise(resolve => server.start(resolve));
 
-
 let win;
 
 Promise.all([app.whenReady(), serverStarted]).then(() => {
+  registerState(electron);
+  registerNavigationJson(electron);
+
   win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -29,24 +34,11 @@ Promise.all([app.whenReady(), serverStarted]).then(() => {
       webviewTag: true
     }
   });
-  // win.loadFile('./q.html');
-  win.loadURL('https://www.ozon.ru/');
-  // win.loadURL('http://localhost:3000');
-  // win.openDevTools();
-  new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      webSecurity: false,
-      devTools: true,
-      allowRunningInsecureContent: true,
-      nodeIntegration: true,
-      enableRemoteModule: true,
-      nodeIntegrationInWorker: true,
-      contextIsolation: false,
-      webviewTag: true
-    }
-  }).loadURL('http://localhost:3000/index.html')
+
+  return win.loadURL('https://www.ozon.ru/');
+}).then(() => {
+  patch({ navigation: read() });
+  select(({ navigation }) => navigation).subscribe(write);
 });
 
 

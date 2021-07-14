@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import { Store } from './store';
-import { grabScreenshots } from './elements-render';
+import { registerNavigationByClickGrabber, registerNavigationByFrontendEventGrabber } from './grabbers/navigation';
+import { registerScreenshotsGrabber } from './grabbers/screenshots';
 
 window.addEventListener('DOMContentLoaded', () => {
   const root = document.createElement('div');
@@ -10,12 +10,12 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('load', async () => {
-  const screenshots = await grabScreenshots('a');
-  Store.dispatch({
-    type: 'setScreenshots',
-    payload: screenshots
-  }
-  );
-  alert('done');
+  const screenshotsGrabber = registerScreenshotsGrabber('a');
+  const clickNavigationGrabber = registerNavigationByClickGrabber();
+  const frontendEventNavigationGrabber = registerNavigationByFrontendEventGrabber();
+
+  clickNavigationGrabber.onStepAdd(({ to }) => window.location.href = to);
+  frontendEventNavigationGrabber.onStepAdd(({ to }) => window.location.href = to);
+  screenshotsGrabber.run();
 });
 

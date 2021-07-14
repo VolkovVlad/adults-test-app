@@ -1,15 +1,48 @@
 <template>
-  <div class="wrapper">
-    <main>
-      <router-view/>
+  <div class="wrapper" v-bind:class="{ 'with-bar': withBar }">
+    <nav-bar v-if="withBar" :title="title" v-on:back="onBack()"></nav-bar>
+    <main class="scroller">
+      <router-view></router-view>
     </main>
     <nav class="nav">
       <router-link class="nav-link" to="/screens">Screenshots</router-link>
-      <router-link class="nav-link" to="/">Navigation History</router-link>
+      <router-link class="nav-link" to="/navigations">Navigation History</router-link>
       <router-link class="nav-link" to="/about">API History</router-link>
     </nav>
   </div>
 </template>
+
+<script lang="ts">
+  import { defineComponent, ref } from 'vue';
+  import { useRouter } from 'vue-router';
+  import NavBar from '@/components/nav-bar.vue';
+
+  export default defineComponent({
+    name: 'App',
+    components: { NavBar },
+    setup() {
+      const router = useRouter();
+      const withBar = ref(false);
+      const title = ref('');
+
+      router.beforeEach(({ meta }, from, next) => {
+        withBar.value = meta.withBar as boolean;
+        title.value = meta.title as string;
+        next();
+      });
+
+      const onBack = () => {
+        router.back()
+      }
+
+      return {
+        withBar,
+        title,
+        onBack
+      }
+    }
+  });
+</script>
 
 <style lang="scss">
   body {
@@ -28,6 +61,10 @@
     overflow: hidden;
 
     background: #fff;
+
+    &.with-bar {
+      grid-template-rows: auto 1fr auto;
+    }
   }
 
   main {
@@ -61,7 +98,34 @@
     &:not(.router-link-active):hover {
       background: #f1f1f1;
     }
+  }
 
+  .scroller {
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
 
+      border-left: 1px solid #dedede;
+
+      transition: 0.3s;
+      &:hover {
+        background: #ededed;
+      }
+    }
+    &::-webkit-scrollbar-track-piece {
+      border-radius: 3px;
+    }
+    &::-webkit-scrollbar-thumb:vertical {
+      height: 8px;
+
+      background-color: #d5d5d5;
+      border-radius: 3px;
+    }
+    &::-webkit-scrollbar-thumb:horizontal {
+      width: 8px;
+
+      background-color: #d5d5d5;
+      border-radius: 3px;
+    }
   }
 </style>

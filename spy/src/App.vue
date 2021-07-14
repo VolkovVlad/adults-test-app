@@ -1,26 +1,16 @@
 <template>
   <div class="wrapper">
-<!--    <webview-->
-<!--        class="main-app"-->
-<!--        src="http://localhost:3000"-->
-<!--        disablewebsecurity-->
-<!--        nodeintegrationinsubframes-->
-<!--        nodeintegration-->
-<!--        webpreferences="contextIsolation=false">-->
-<!--    </webview>-->
+    <webview
+        class="main-app"
+        src="http://localhost:3000"
+        disablewebsecurity
+        nodeintegrationinsubframes
+        nodeintegration
+        webpreferences="contextIsolation=false">
+    </webview>
   </div>
 
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-declare const __dirname: string;
-
-export default defineComponent({
-  name: 'App'
-});
-</script>
 
 <style lang="css" scoped>
   .wrapper {

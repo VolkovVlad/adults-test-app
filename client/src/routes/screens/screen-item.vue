@@ -1,9 +1,13 @@
 <template>
-  <article class="screen-card" :title="html">
+  <router-link
+    :to="link"
+    :class="{disabled: asView}"
+    class="screen-card"
+  >
     <div class="screen-layer">
       <img class="screenshot" :src="screenshot">
     </div>
-  </article>
+  </router-link>
 </template>
 
 <script>
@@ -14,23 +18,23 @@ export default {
       type: Number,
       required: true
     },
-    html: {
-      type: String,
-      required: true
-    },
-    selector: {
-      type: String,
-      required: true
-    },
     screenshot: {
       type: String,
       required: true
+    },
+    asView: {
+      type: Boolean
+    }
+  },
+  computed: {
+    link() {
+      return `/screens/${this.order}`
     }
   }
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .screen-card {
     display: block;
     padding: 15px;
@@ -39,6 +43,16 @@ export default {
     width: 200px;
     border-radius: 6px;
     text-decoration: none;
+
+    transition: 0.3s; 
+    
+    &:hover {
+      background: #f1f1f1;
+    }
+
+    &.disabled {
+      pointer-events: none;
+    }
   }
 
   .screen-layer {
@@ -58,8 +72,7 @@ export default {
     left: 10px;
     height: calc(100% - 20px);
     width: calc(100% - 20px);
-    border: 1px dashed red;
-
+    object-position: center;
     object-fit: contain;
   }
 </style>
