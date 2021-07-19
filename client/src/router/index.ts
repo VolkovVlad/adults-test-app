@@ -1,9 +1,10 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw, RouterView } from 'vue-router'
 import Home from '../views/Home.vue'
-import About from '../views/About.vue';
 import Screens from '../routes/screens/screens.vue';
 import Screen from '../routes/screen/screen.vue';
 import Navigations from '../routes/navigations/navigations.vue';
+import ApiHistory from '../routes/api-history/api-history.vue';
+import Request from '../routes/api-history/request.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -17,13 +18,36 @@ const routes: Array<RouteRecordRaw> = [
     component: Navigations,
     meta: {
       withBar: true,
-      title: 'Navigation History'
+      title: 'Navigation History',
+      back: { path: '/' }
     },
   },
   {
-    path: '/about',
-    name: 'About',
-    component: About
+    path: '/api-history',
+    component: RouterView,
+    children: [
+      {
+        path: '',
+        name: 'Api History',
+        meta: {
+          withBar: true,
+          title: 'Api History',
+          back: { path: '/' }
+        },
+        component: ApiHistory
+      },
+      {
+        path: ':requestId',
+        name: 'Request',
+        component: Request,
+        props: true,
+        meta: {
+          withBar: true,
+          title: 'Request',
+          back: { path: '/api-history' }
+        }
+      }
+    ]
   },
   {
     path: '/screens',
@@ -35,7 +59,8 @@ const routes: Array<RouteRecordRaw> = [
         component: Screens,
         meta: {
           withBar: true,
-          title: 'Screenshots'
+          title: 'Screenshots',
+          back: { path: '/' }
         },
       },
       {
@@ -45,7 +70,8 @@ const routes: Array<RouteRecordRaw> = [
         props: true,
         meta: {
           withBar: true,
-          title: 'Rendered Element'
+          title: 'Rendered Element',
+          back: { path: '/screens' }
         }
       }
     ]

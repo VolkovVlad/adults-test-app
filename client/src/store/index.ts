@@ -4,11 +4,19 @@ import { StoreModel } from '@app-common/state';
 
 export const Store = createStore<StoreModel>({
   plugins: [ createAppStatePatcher() ],
-  getters: {},
+  getters: {
+    shortApiHistory({ apiHistory }) {
+      return apiHistory.map(({ id, url, method }) => ({ id, url, method }))
+    },
+    apiHistoryCount({ apiHistory }) {
+      return apiHistory.length
+    }
+  },
   state: {
     screenshots: [],
     isScreensGrabCompleted: false,
-    navigation: []
+    navigation: [],
+    apiHistory: []
   },
   mutations: {
     setStore(state, received): void {

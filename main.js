@@ -3,7 +3,7 @@ const path = require('path');
 const StaticServer = require('static-server');
 const { registerState, select, patch } = require('./common/dist/state');
 const { registerNavigationJson, read, write } = require('./common/dist/db');
-const { app, BrowserWindow } = electron;
+const { app, BrowserWindow, ipcMain } = electron;
 
 
 const server = new StaticServer({
@@ -22,6 +22,7 @@ Promise.all([app.whenReady(), serverStarted]).then(() => {
   win = new BrowserWindow({
     width: 800,
     height: 600,
+    autoHideMenuBar: true,
     webPreferences: {
       webSecurity: false,
       devTools: true,
@@ -35,10 +36,44 @@ Promise.all([app.whenReady(), serverStarted]).then(() => {
     }
   });
 
+
+
   return win.loadURL('https://www.ozon.ru/');
 }).then(() => {
   patch({ navigation: read() });
   select(({ navigation }) => navigation).subscribe(write);
+
+  let clientWin;
+
+  ipcMain.addListener('openClient', async ({ sender }) => {
+    clientWin = new BrowserWindow({
+      width: 800,
+      height: 600,
+      autoHideMenuBar: true,
+      webPreferences: {
+        webSecurity: false,
+        allowRunningInsecureContent: true,
+        nodeIntegration: true,
+        enableRemoteModule: true,
+        nodeIntegrationInWorker: true,
+        contextIsolation: false,
+      }
+    });
+
+    await clientWin.loadURL('http://localhost:3000');
+
+    clientWin.once('closed', () => {
+      sender?.send('closeClient')
+      clientWin?.destroy()
+      clientWin = null;
+    })
+  })
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 });
 
 

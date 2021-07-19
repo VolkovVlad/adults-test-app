@@ -6,7 +6,8 @@ import { GetSelection, StreamSelection } from './__internal/types';
 const AppStateInitial = {
   screenshots: [],
   isScreensGrabCompleted: false,
-  navigation: []
+  navigation: [],
+  apiHistory: []
 };
 
 const State = new BehaviorSubject<StoreModel>(AppStateInitial);

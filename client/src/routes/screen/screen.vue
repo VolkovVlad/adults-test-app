@@ -1,6 +1,6 @@
 <template>
   <div class="screen-description">
-    <div class="screen-description-content">
+    <div class="screen-description-content" v-if="!!element">
       <screen-item
           class="screen-description-pic"
           :as-view="true"

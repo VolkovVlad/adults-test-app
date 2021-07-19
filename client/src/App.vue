@@ -7,14 +7,14 @@
     <nav class="nav">
       <router-link class="nav-link" to="/screens">Screenshots</router-link>
       <router-link class="nav-link" to="/navigations">Navigation History</router-link>
-      <router-link class="nav-link" to="/about">API History</router-link>
+      <router-link class="nav-link" to="/api-history">API History</router-link>
     </nav>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import { useRouter } from 'vue-router';
+  import { defineComponent, ref, onMounted } from 'vue';
+  import { RouteLocationRaw, useRouter } from 'vue-router';
   import NavBar from '@/components/nav-bar.vue';
 
   export default defineComponent({
@@ -25,14 +25,21 @@
       const withBar = ref(false);
       const title = ref('');
 
-      router.beforeEach(({ meta }, from, next) => {
+      router.beforeEach(({ name, meta }, from, next) => {
         withBar.value = meta.withBar as boolean;
-        title.value = meta.title as string;
+        title.value = name as string;
         next();
       });
 
+      onMounted(() => router.push({ path: localStorage.getItem('latest') || '/'  }));
+
+
+      router.afterEach(({ path }) => {
+        localStorage.setItem('latest', path);
+      })
+
       const onBack = () => {
-        router.back()
+        router.push(router.currentRoute.value.meta.back as RouteLocationRaw)
       }
 
       return {

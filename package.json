@@ -4,7 +4,8 @@
   "description": "test task for adults team",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist-win": "electron-builder -w --x64"
   },
   "repository": {
     "type": "git",
@@ -17,9 +18,27 @@
   },
   "homepage": "https://github.com/VolkovVlad/adults-test-app#readme",
   "dependencies": {
-    "static-server": "^2.2.1"
+    "rxjs": "^7.2.0",
+    "static-server": "^2.2.1",
+    "tslib": "^2.3.0",
+    "typescript": "^4.3.5"
   },
   "devDependencies": {
-    "electron": "^13.1.5"
+    "electron": "^13.1.5",
+    "electron-builder": "^22.11.7"
+  },
+  "build": {
+    "appId": "com.test-adults",
+    "files": [
+      "main.js",
+      "./node_modules",
+      "./client/dist/**/*",
+      "./common/dist/**/*",
+      "./spy/dist/**/*"
+    ],
+    "directories": {
+      "buildResources": "resources",
+      "output": "electron-dist"
+    }
   }
 }

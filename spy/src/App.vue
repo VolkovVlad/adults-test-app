@@ -1,6 +1,10 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" v-if="isInside">
+    <button class="electron-opener" @click="open">
+      Open in separate window
+    </button>
     <webview
+        ref="clientRoot"
         class="main-app"
         src="http://localhost:3000"
         disablewebsecurity
@@ -9,8 +13,35 @@
         webpreferences="contextIsolation=false">
     </webview>
   </div>
-
 </template>
+
+<script lang="ts">
+import { ref } from 'vue';
+import { openOutside, onOpenInside } from './state-utils';
+
+export default {
+  name: 'App',
+  setup(){
+    const isInside = ref(true);
+    const clientRoot = ref(null)
+
+    const open = () => {
+      (clientRoot.value as any).send('will-close');
+      isInside.value = false;
+      openOutside();
+    };
+
+    onOpenInside(() => isInside.value = true);
+
+    return {
+      isInside,
+      clientRoot,
+      open
+    }
+  }
+}
+
+</script>
 
 <style lang="css" scoped>
   .wrapper {
@@ -30,9 +61,25 @@
   }
 
   .main-app {
-    height: 100%;
+    height: calc(100% - 45px);
     width: 100%;
     opacity: 0.95;
     transition: 0.3s;
+  }
+
+  .electron-opener {
+    display: block;
+    border: none;
+    background: #41b883;
+    padding: 15px 0;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    transition: 0.3s;
+    cursor: pointer;
+  }
+
+  .electron-opener:hover {
+    background: #188964;
   }
 </style>

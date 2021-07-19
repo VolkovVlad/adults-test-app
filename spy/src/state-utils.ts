@@ -1,7 +1,7 @@
-import { ScreenshotModel, LinkNavigation } from '@app-common/state';
+import { ScreenshotModel, LinkNavigation, RequestLog } from '@app-common/state';
 
 declare const __non_webpack_require__: (path: string) => any;
-const { remote } = __non_webpack_require__('electron');
+const { remote, ipcRenderer } = __non_webpack_require__('electron');
 const { app: { AppState }} = remote;
 
 export const { patch, reset, get, select } = AppState;
@@ -22,3 +22,23 @@ export const getLatestNavigationStep = () => {
 }
 
 export const resetAllState = () => AppState.reset();
+
+export const addRequestLog = (step: RequestLog) => {
+  const { apiHistory } = get();
+  patch({ apiHistory: [...apiHistory, step] });
+}
+
+export const patchRequestLog = (updated: Partial<RequestLog> & Pick<RequestLog, 'id'>) => {
+  const state = get() as { apiHistory: RequestLog[] };
+  const apiHistory = [...state.apiHistory];
+  const index = apiHistory.findIndex(({id}) => id === updated.id);
+  apiHistory[index] = {
+    ...apiHistory[index],
+    ...updated
+  }
+  patch({ apiHistory: [...apiHistory] });
+}
+
+export const openOutside = () => ipcRenderer.send('openClient', true);
+
+export const onOpenInside = (cb: Function) => ipcRenderer.on('closeClient', cb)
