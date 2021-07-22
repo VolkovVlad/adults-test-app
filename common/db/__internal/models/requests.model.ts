@@ -26,7 +26,7 @@ export default (sequelize: Sequelize): RequestModel => {
       id: {
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.NUMBER
+        type: DataTypes.INTEGER
       },
       requestHeaders: DataTypes.TEXT,
       requestBody: DataTypes.TEXT,

@@ -1,3 +1,5 @@
+const { registerDb }  = require ('./common/dist/db');
+
 const electron = require ('electron');
 const path = require('path');
 const StaticServer = require('static-server');
@@ -15,7 +17,7 @@ const serverStarted = new Promise(resolve => server.start(resolve));
 
 let win;
 
-Promise.all([app.whenReady(), serverStarted]).then(() => {
+Promise.all([app.whenReady(), serverStarted, registerDb(electron)]).then(() => {
   registerState(electron);
   registerNavigationJson(electron);
 

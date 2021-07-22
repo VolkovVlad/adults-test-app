@@ -9,8 +9,7 @@ export const registerNetworkGrabber = (interceptor?: Interceptor) => {
   const initialFetch = window.fetch;
   window.fetch = async (input: RequestInfo, init?: RequestInit) => {
     const url = typeof input === 'string' ? input : ((input as any).url?.href || input.url);
-    const log: RequestLog = {
-      id: ++itemsCount,
+    const log: RequestLog = await addRequestLog({
       url,
       method: init?.method ?? 'get',
       type: 'fetch',
@@ -23,9 +22,7 @@ export const registerNetworkGrabber = (interceptor?: Interceptor) => {
         headers: {},
         body: undefined
       }
-    };
-
-    addRequestLog(log);
+    });
 
     const response = typeof interceptor === 'function' ?
       await interceptor(input, init!, initialFetch) :
@@ -37,7 +34,7 @@ export const registerNetworkGrabber = (interceptor?: Interceptor) => {
       log.received.headers[key] = val;
     })
 
-    patchRequestLog(log);
+    await patchRequestLog(log);
 
     const initialText = Response.prototype.text;
     const initialJson = Response.prototype.json;
@@ -45,17 +42,17 @@ export const registerNetworkGrabber = (interceptor?: Interceptor) => {
 
     response.text = async () => {
       log.received.body = await initialText.apply(response);
-      patchRequestLog(log);
+      await patchRequestLog(log);
       return log.received.body
     }
     response.json = async () => {
       log.received.body = await initialJson.apply(response);
-      patchRequestLog(log);
+      await patchRequestLog(log);
       return log.received.body;
     }
     response.blob = async () => {
       log.received.body = url;
-      patchRequestLog(log);
+      await patchRequestLog(log);
       return await initialBlob.apply(response)
     }
 
@@ -86,7 +83,6 @@ export const registerNetworkGrabber = (interceptor?: Interceptor) => {
     open(method: string, url: string, async?: boolean, name?: string | null, pwd?: string | null) {
       this.log.method = method;
       this.log.url = url;
-      addRequestLog(this.log);
       return super.open(method, url, async!, name, pwd)
     }
 
@@ -97,7 +93,7 @@ export const registerNetworkGrabber = (interceptor?: Interceptor) => {
 
     send(body?: Document | BodyInit | null) {
       this.log.send.body = body?.toString() || undefined;
-      this.addEventListener('load', (e) => {
+      this.addEventListener('load', async (e) => {
         this.log.received.headers = this.getAllResponseHeaders()
           .split('\r\n')
           .reduce((result, current) => {
@@ -107,7 +103,8 @@ export const registerNetworkGrabber = (interceptor?: Interceptor) => {
           }, {} as RequestLog['received']['headers']);
         this.log.received.body = this.responseText;
         this.log.state = 'received';
-        patchRequestLog(this.log);
+        await addRequestLog(this.log);
+        await patchRequestLog(this.log);
       }, { once: true })
       return super.send(body)
     }
