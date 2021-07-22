@@ -3,6 +3,7 @@ module.exports = {
         es6: true,
         "node": true
     },
+
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended"
@@ -11,9 +12,11 @@ module.exports = {
     "parserOptions": {
         "ecmaVersion": 12
     },
+
     "plugins": [
         "@typescript-eslint"
     ],
     "rules": {
+        "@typescript-eslint/ban-types": 0
     }
 };

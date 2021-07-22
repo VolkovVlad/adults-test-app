@@ -1,5 +1,6 @@
 import { join } from 'path';
-const { app } = require('electron');
+import { app } from 'electron';
 
 export const navigationHistoryJson = join(app.getPath('userData'), 'navigation-history.json');
+export const dbPath = join(app.getPath('userData'), 'adults.db');
 
